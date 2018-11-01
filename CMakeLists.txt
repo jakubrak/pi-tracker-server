@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.1)
-project(PiTracker)
+project(pi-tracker-server)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 find_package(Boost REQUIRED COMPONENTS thread system)
 
-add_executable(pitracker
+add_executable(pi-tracker-server
     main.cpp
     messagehandler.cpp
     messagehandler.h
@@ -22,4 +22,4 @@ add_executable(pitracker
     getstreamsettingsmsg.cpp
     getstreamsettingsmsg.h)
 
-target_link_libraries(pitracker Boost::thread Boost::system)
+target_link_libraries(pi-tracker-server Boost::thread Boost::system)
