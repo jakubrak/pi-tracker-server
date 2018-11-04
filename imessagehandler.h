@@ -3,17 +3,17 @@
 
 #include <memory>
 
-class IMessage;
-class StartStreamingMsg;
-class GetStreamSettingsMsg;
+class IResponseMessage;
+class StartStreamingRequest;
+class StreamSettingsRequest;
 
 class IMessageHandler {
 public:
     virtual ~IMessageHandler() = default;
 
-    virtual std::unique_ptr<IMessage> handle(const GetStreamSettingsMsg& getStreamSettingsMsg) = 0;
+    virtual std::unique_ptr<IResponseMessage> handle(const StreamSettingsRequest& getStreamSettingsMsg) = 0;
 
-    virtual std::unique_ptr<IMessage> handle(const StartStreamingMsg& startStreamingMsg) = 0;
+    virtual std::unique_ptr<IResponseMessage> handle(const StartStreamingRequest& startStreamingMsg) = 0;
 };
 
 #endif // IMESSAGEHANDLER_H

@@ -1,13 +1,16 @@
+#include <iostream>
+
 #include <boost/property_tree/json_parser.hpp>
 
-#include "getstreamsettingsmsg.h"
-#include "imessage.h"
-#include "startstreamingmsg.h"
+#include "irequestmessage.h"
+#include "startstreamingrequest.h"
+#include "streamsettingsrequest.h"
+#include "streamsettingsresponse.h"
 
 #include "messageparser.h"
 
-std::vector<std::unique_ptr<IMessage>> MessageParser::parse(std::istream& is) {
-    std::vector<std::unique_ptr<IMessage>> messageQueue;
+std::vector<std::unique_ptr<IRequestMessage>> MessageParser::parse(std::istream& is) {
+    std::vector<std::unique_ptr<IRequestMessage>> messageQueue;
     char c;
     while(is.get(c)) {
         buffer << c;
@@ -29,20 +32,25 @@ std::vector<std::unique_ptr<IMessage>> MessageParser::parse(std::istream& is) {
     return messageQueue;
 }
 
-std::unique_ptr<IMessage> MessageParser::parse(const boost::property_tree::ptree& pt) {
+std::unique_ptr<IRequestMessage> MessageParser::parse(const boost::property_tree::ptree& pt) {
     std::string messageId = pt.get<std::string>("msgid");
     if (messageId == "GET_STREAM_SETTINGS") {
-        return std::make_unique<GetStreamSettingsMsg>();
+        return std::make_unique<StreamSettingsRequest>();
     } else if (messageId == "START_STREAMING") {
-        return std::make_unique<StartStreamingMsg>("192.168.0.158");
+        return std::make_unique<StartStreamingRequest>("192.168.0.158");
     }
+    std::cerr << "Received unrecognized message: " << messageId << std::endl;
     return nullptr;
 }
 
-std::string MessageParser::unparse(const GetStreamSettingsMsg& message) {
-
-}
-
-std::string MessageParser::unparse(const StartStreamingMsg& message) {
-
+std::string MessageParser::unparse(const StreamSettingsResponse& message) {
+    boost::property_tree::ptree pt;
+    pt.put("msgid", "STREAM_SETTINGS");
+    pt.put("port", message.getPort());
+    pt.put("frame.width", message.getFrameWidth());
+    pt.put("frame.height", message.getFrameHeight());
+    pt.put("frame.rate", message.getFrameRate());
+    std::stringstream output;
+    boost::property_tree::json_parser::write_json(output, pt);
+    return output.str();
 }

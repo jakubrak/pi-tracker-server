@@ -1,7 +1,8 @@
 #include <iostream>
 
-#include "getstreamsettingsmsg.h"
-#include "startstreamingmsg.h"
+#include "iresponsemessage.h"
+#include "settings.h"
+#include "streamsettingsresponse.h"
 
 #include "messagehandler.h"
 
@@ -9,12 +10,15 @@ MessageHandler::MessageHandler(Settings& settings) : settings{settings} {
 
 }
 
-std::unique_ptr<IMessage> MessageHandler::handle(const GetStreamSettingsMsg& getStreamSettingsMsg) {
+std::unique_ptr<IResponseMessage> MessageHandler::handle(const StreamSettingsRequest& streamSettingsRequest) {
     std::cout << "GetStreamSettingsMsg" << std::endl;
-    return nullptr;
+    return std::make_unique<StreamSettingsResponse>(settings.getUdpPort(),
+        settings.getFrameWidth(),
+        settings.getFrameHeight(),
+        settings.getFrameRate());
 }
 
-std::unique_ptr<IMessage> MessageHandler::handle(const StartStreamingMsg& startStreamingMsg) {
+std::unique_ptr<IResponseMessage> MessageHandler::handle(const StartStreamingRequest& startStreamingRequest) {
     std::cout << "StartStreamingMsg" << std::endl;
     return nullptr;
 }

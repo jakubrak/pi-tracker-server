@@ -14,13 +14,16 @@ add_executable(pi-tracker-server
     messageparser.h
     imessagehandler.h
     imessageparser.h
-    imessage.h
-    startstreamingmsg.cpp
-    startstreamingmsg.h
+    irequestmessage.h
+    iresponsemessage.h
+    startstreamingrequest.cpp
+    startstreamingrequest.h
     tcpserver.cpp
     tcpserver.h
-    getstreamsettingsmsg.cpp
-    getstreamsettingsmsg.h
+    streamsettingsrequest.cpp
+    streamsettingsrequest.h
+    streamsettingsresponse.cpp
+    streamsettingsresponse.h
     settings.cpp
     settings.h)
 

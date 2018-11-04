@@ -2,7 +2,8 @@
 
 #include <boost/bind.hpp>
 
-#include "imessage.h"
+#include "irequestmessage.h"
+#include "iresponsemessage.h"
 #include "imessageparser.h"
 #include "imessagehandler.h"
 
@@ -15,7 +16,6 @@ TcpServer::TcpServer(const short port, IMessageParser& messageParser, IMessageHa
   work{ioContext},
   socket{ioContext},
   acceptor{ioContext, tcp::endpoint(tcp::v4(), port)},
-  buffer{streambuf.prepare(BUF_SIZE)},
   messageParser{messageParser},
   messageHandler{messageHandler} {}
 
@@ -40,7 +40,7 @@ void TcpServer::accept(const boost::system::error_code& error) {
         std::cout << "Connected to " << remoteEndpoint.address() << std::endl;
 
         socket.async_receive(
-            buffer,
+            streambuf.prepare(BUF_SIZE),
             boost::bind(&TcpServer::receive,
                 this,
                 boost::asio::placeholders::error,
@@ -49,8 +49,9 @@ void TcpServer::accept(const boost::system::error_code& error) {
 }
 
 void TcpServer::receive(const boost::system::error_code& error, std::size_t byteCount ) {
-    std::cout << "Received " << byteCount << " bytes:" << std::endl;
     streambuf.commit(byteCount);
+
+    std::cout << "Received " << streambuf.size() << " bytes:" << std::endl;
     std::istream is(&streambuf);
     auto messageQueue = messageParser.parse(is);
     for (const auto& request : messageQueue) {
@@ -59,4 +60,13 @@ void TcpServer::receive(const boost::system::error_code& error, std::size_t byte
             send(response->unparse(messageParser));
         }
     }
+
+    streambuf.consume(byteCount);
+
+    socket.async_receive(
+        streambuf.prepare(BUF_SIZE),
+        boost::bind(&TcpServer::receive,
+            this,
+            boost::asio::placeholders::error,
+            boost::asio::placeholders::bytes_transferred));
 }

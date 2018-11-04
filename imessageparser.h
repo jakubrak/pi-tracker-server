@@ -4,19 +4,16 @@
 #include <memory>
 #include <vector>
 
-class IMessage;
-class GetStreamSettingsMsg;
-class StartStreamingMsg;
+class IRequestMessage;
+class StreamSettingsResponse;
 
 class IMessageParser {
 public:
     virtual ~IMessageParser() = default;
 
-    virtual std::vector<std::unique_ptr<IMessage>> parse(std::istream& is) = 0;
+    virtual std::vector<std::unique_ptr<IRequestMessage>> parse(std::istream& is) = 0;
 
-    virtual std::string unparse(const GetStreamSettingsMsg& message) = 0;
-
-    virtual std::string unparse(const StartStreamingMsg& message) = 0;
+    virtual std::string unparse(const StreamSettingsResponse& message) = 0;
 };
 
 #endif // IMESSAGEPARSER_H

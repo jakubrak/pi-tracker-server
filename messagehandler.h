@@ -6,7 +6,7 @@
 
 #include "imessagehandler.h"
 
-class IMessageWriter;
+class IResponseMessage;
 class Settings;
 
 class MessageHandler : public IMessageHandler {
@@ -15,9 +15,9 @@ public:
 
     ~MessageHandler() override = default;
 
-    std::unique_ptr<IMessage> handle(const GetStreamSettingsMsg& getStreamSettingsMsg) override;
+    std::unique_ptr<IResponseMessage> handle(const StreamSettingsRequest& getStreamSettingsMsg) override;
 
-    std::unique_ptr<IMessage> handle(const StartStreamingMsg& startStreamingMsg) override;
+    std::unique_ptr<IResponseMessage> handle(const StartStreamingRequest& startStreamingRequest) override;
 
 private:
     Settings& settings;

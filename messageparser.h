@@ -7,18 +7,18 @@
 
 #include "imessageparser.h"
 
+class StreamSettingsResponse;
+
 class MessageParser : public IMessageParser {
 public:
     ~MessageParser() override = default;
 
-    std::vector<std::unique_ptr<IMessage>> parse(std::istream& is) override;
+    std::vector<std::unique_ptr<IRequestMessage>> parse(std::istream& is) override;
 
-    std::string unparse(const GetStreamSettingsMsg& message) override;
-
-    std::string unparse(const StartStreamingMsg& message) override;
+    std::string unparse(const StreamSettingsResponse& message) override;
 
 private:
-    std::unique_ptr<IMessage> parse(const boost::property_tree::ptree& pt);
+    std::unique_ptr<IRequestMessage> parse(const boost::property_tree::ptree& pt);
 
     std::stringstream buffer;
     std::stack<char> stack;

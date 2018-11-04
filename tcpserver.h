@@ -32,7 +32,6 @@ private:
     boost::asio::ip::tcp::endpoint remoteEndpoint;
     static const std::size_t BUF_SIZE = 1024;
     boost::asio::streambuf streambuf;
-    boost::asio::streambuf::mutable_buffers_type buffer;
 
     IMessageParser& messageParser;
     IMessageHandler& messageHandler;
