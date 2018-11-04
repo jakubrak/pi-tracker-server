@@ -7,20 +7,20 @@
 #include "imessagehandler.h"
 
 class IMessageWriter;
+class Settings;
 
 class MessageHandler : public IMessageHandler {
 public:
-    virtual ~MessageHandler() {}
+    MessageHandler(Settings& settings);
 
-    void handle(const GetStreamSettingsMsg &getStreamSettingsMsg) override;
+    ~MessageHandler() override = default;
 
-    void handle(const StartStreamingMsg &startStreamingMsg) override;
+    std::unique_ptr<IMessage> handle(const GetStreamSettingsMsg& getStreamSettingsMsg) override;
 
-
-    void addMessageWriter(std::shared_ptr<IMessageWriter> messageWriter);
+    std::unique_ptr<IMessage> handle(const StartStreamingMsg& startStreamingMsg) override;
 
 private:
-    std::vector<std::shared_ptr<IMessageWriter>> messageWriters;
+    Settings& settings;
 };
 
 #endif // MESSAGEHANDLER_H

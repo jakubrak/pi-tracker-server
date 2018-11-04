@@ -6,20 +6,18 @@
 
 #include <boost/asio.hpp>
 
-#include "imessagewriter.h"
+class IMessageParser;
+class IMessageHandler;
 
-class IMessageListener;
-
-class TcpServer : public IMessageWriter {
+class TcpServer {
 public:
-    TcpServer(const short port);
-    virtual ~TcpServer() {}
+    TcpServer(const short port, IMessageParser &messageParser, IMessageHandler &messageHandler);
+
+    ~TcpServer() = default;
 
     void run();
 
-    void send(std::istream &is) override;
-
-    void addMessageListener(std::shared_ptr<IMessageListener> messageListener);
+    void send(const std::string &data);
 
 private:
     void accept(const boost::system::error_code& error);
@@ -27,7 +25,6 @@ private:
     void receive(const boost::system::error_code& error, std::size_t byteCount );
 
     short port;
-    std::vector<std::shared_ptr<IMessageListener>> messageListeners;
     boost::asio::io_service ioContext;
     boost::asio::io_service::work work;
     boost::asio::ip::tcp::socket socket;
@@ -36,6 +33,9 @@ private:
     static const std::size_t BUF_SIZE = 1024;
     boost::asio::streambuf streambuf;
     boost::asio::streambuf::mutable_buffers_type buffer;
+
+    IMessageParser& messageParser;
+    IMessageHandler& messageHandler;
 };
 
 #endif // TCPSERVER_H

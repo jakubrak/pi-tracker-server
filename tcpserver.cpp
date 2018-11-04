@@ -2,18 +2,22 @@
 
 #include <boost/bind.hpp>
 
-#include "imessagelistener.h"
+#include "imessage.h"
+#include "imessageparser.h"
+#include "imessagehandler.h"
 
 #include "tcpserver.h"
 
 using boost::asio::ip::tcp;
 
-TcpServer::TcpServer(const short port)
+TcpServer::TcpServer(const short port, IMessageParser& messageParser, IMessageHandler& messageHandler)
 : port{port},
   work{ioContext},
   socket{ioContext},
   acceptor{ioContext, tcp::endpoint(tcp::v4(), port)},
-  buffer{streambuf.prepare(BUF_SIZE)} {}
+  buffer{streambuf.prepare(BUF_SIZE)},
+  messageParser{messageParser},
+  messageHandler{messageHandler} {}
 
 void TcpServer::run() {
     std::cout << "TCP server started on port " << port << std::endl;
@@ -27,12 +31,8 @@ void TcpServer::run() {
     ioContext.run();
 }
 
-void TcpServer::send(std::istream &is)  {
-
-}
-
-void TcpServer::addMessageListener(std::shared_ptr<IMessageListener> messageListener) {
-    messageListeners.push_back(messageListener);
+void TcpServer::send(const std::string& data)  {
+    boost::asio::write(socket, boost::asio::buffer(data, data.size()));
 }
 
 void TcpServer::accept(const boost::system::error_code& error) {
@@ -52,7 +52,11 @@ void TcpServer::receive(const boost::system::error_code& error, std::size_t byte
     std::cout << "Received " << byteCount << " bytes:" << std::endl;
     streambuf.commit(byteCount);
     std::istream is(&streambuf);
-    for (auto& listener : messageListeners) {
-        listener->received(is);
+    auto messageQueue = messageParser.parse(is);
+    for (const auto& request : messageQueue) {
+        auto response = request->handle(messageHandler);
+        if (response != nullptr) {
+            send(response->unparse(messageParser));
+        }
     }
 }

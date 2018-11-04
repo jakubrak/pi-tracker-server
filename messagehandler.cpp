@@ -5,14 +5,18 @@
 
 #include "messagehandler.h"
 
-void MessageHandler::handle(const GetStreamSettingsMsg &getStreamSettingsMsg) {
+MessageHandler::MessageHandler(Settings& settings) : settings{settings} {
+
+}
+
+std::unique_ptr<IMessage> MessageHandler::handle(const GetStreamSettingsMsg& getStreamSettingsMsg) {
     std::cout << "GetStreamSettingsMsg" << std::endl;
+    return nullptr;
 }
 
-void MessageHandler::handle(const StartStreamingMsg &startStreamingMsg) {
+std::unique_ptr<IMessage> MessageHandler::handle(const StartStreamingMsg& startStreamingMsg) {
     std::cout << "StartStreamingMsg" << std::endl;
+    return nullptr;
 }
 
-void MessageHandler::addMessageWriter(std::shared_ptr<IMessageWriter> messageWriter) {
-    messageWriters.push_back(messageWriter);
-}
+

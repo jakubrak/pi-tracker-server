@@ -1,38 +1,27 @@
 #ifndef MESSAGEPARSER_H
 #define MESSAGEPARSER_H
 
-#include <memory>
 #include <stack>
-#include <vector>
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "imessagehandler.h"
-#include "imessagelistener.h"
+#include "imessageparser.h"
 
-class MessageParser : public IMessageListener {
+class MessageParser : public IMessageParser {
 public:
-    virtual ~MessageParser() {}
+    ~MessageParser() override = default;
 
-    void received(std::istream &is) override;
+    std::vector<std::unique_ptr<IMessage>> parse(std::istream& is) override;
 
-    void parse(std::istream &is);
+    std::string unparse(const GetStreamSettingsMsg& message) override;
 
-    void addMessageHandler(std::shared_ptr<IMessageHandler> messageHandler);
+    std::string unparse(const StartStreamingMsg& message) override;
 
 private:
-    void parse(const boost::property_tree::ptree &pt);
-
-    template<typename T>
-    void notifyHandlers(const T& message) {
-        for (auto &h : messageHandlers) {
-            h->handle(message);
-        }
-    }
+    std::unique_ptr<IMessage> parse(const boost::property_tree::ptree& pt);
 
     std::stringstream buffer;
     std::stack<char> stack;
-    std::vector<std::shared_ptr<IMessageHandler>> messageHandlers;
 };
 
 #endif // MESSAGEPARSER_H
