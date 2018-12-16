@@ -12,11 +12,15 @@
 int main(int argc, char** argv) {
     gst_init (&argc, &argv);
     try {
-        MessageParser messageParser;
-        Settings settings;
-        MessageHandler messageHandler(settings);
-        TcpServer server(5022, messageParser, messageHandler);
-        server.run();
+        while (true) {
+            MessageParser messageParser;
+            Settings settings;
+            Pipeline pipeline;
+            MessageHandler messageHandler(settings, pipeline);
+            TcpServer server(5022, messageParser, messageHandler);
+            server.run();
+        }
+
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
     }

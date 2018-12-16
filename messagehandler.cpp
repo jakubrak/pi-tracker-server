@@ -7,7 +7,7 @@
 
 #include "messagehandler.h"
 
-MessageHandler::MessageHandler(Settings& settings) : settings{settings}, pipeline{nullptr} {
+MessageHandler::MessageHandler(Settings& settings, Pipeline& pipeline) : settings{settings}, pipeline{pipeline} {
 
 }
 
@@ -22,8 +22,7 @@ std::unique_ptr<IResponseMessage> MessageHandler::handle(const StreamSettingsReq
 
 std::unique_ptr<IResponseMessage> MessageHandler::handle(const StartStreamingRequest& startStreamingRequest) {
     std::cout << "StartStreamingMsg" << std::endl;
-    pipeline = std::make_unique<Pipeline>();
-    pipeline->play();
+    pipeline.play();
     return nullptr;
 }
 

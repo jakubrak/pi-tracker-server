@@ -12,7 +12,7 @@ class Pipeline;
 
 class MessageHandler : public IMessageHandler {
 public:
-    MessageHandler(Settings& settings);
+    MessageHandler(Settings& settings, Pipeline &pipeline);
 
     ~MessageHandler() override = default;
 
@@ -22,7 +22,7 @@ public:
 
 private:
     Settings& settings;
-    std::unique_ptr<Pipeline> pipeline;
+    Pipeline& pipeline;
 };
 
 #endif // MESSAGEHANDLER_H

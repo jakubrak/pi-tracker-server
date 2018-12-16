@@ -255,15 +255,16 @@ Pipeline::Pipeline() {
     add_stream (pipe, rtpBin, videoSession);
     add_stream (pipe, rtpBin, audioSession);
 
-    g_print ("stopping server pipeline\n");
     gst_element_set_state (GST_ELEMENT (pipe), GST_STATE_NULL);
 }
 
 Pipeline::~Pipeline() {
+    g_print ("Stopping server pipeline\n");
+    gst_element_set_state (GST_ELEMENT (pipe), GST_STATE_NULL);
     gst_object_unref (pipe);
 }
 
 void Pipeline::play() {
-    g_print ("starting server pipeline\n");
+    g_print ("Starting server pipeline\n");
     gst_element_set_state (GST_ELEMENT (pipe), GST_STATE_PLAYING);
 }
