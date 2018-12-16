@@ -39,8 +39,7 @@ void TcpServer::accept(const boost::system::error_code& error) {
     if (!error) {
         std::cout << "Connected to " << remoteEndpoint.address() << std::endl;
 
-        socket.async_receive(
-            streambuf.prepare(BUF_SIZE),
+        socket.async_receive(streambuf.prepare(BUF_SIZE),
             boost::bind(&TcpServer::receive,
                 this,
                 boost::asio::placeholders::error,
@@ -63,8 +62,7 @@ void TcpServer::receive(const boost::system::error_code& error, std::size_t byte
 
     streambuf.consume(byteCount);
 
-    socket.async_receive(
-        streambuf.prepare(BUF_SIZE),
+    socket.async_receive(streambuf.prepare(BUF_SIZE),
         boost::bind(&TcpServer::receive,
             this,
             boost::asio::placeholders::error,

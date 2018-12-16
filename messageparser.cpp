@@ -46,7 +46,8 @@ std::unique_ptr<IRequestMessage> MessageParser::parse(const boost::property_tree
 std::string MessageParser::unparse(const StreamSettingsResponse& message) {
     boost::property_tree::ptree pt;
     pt.put("msgid", "STREAM_SETTINGS");
-    pt.put("port", message.getPort());
+    pt.put("port.video", message.getVideoPort());
+    pt.put("port.metadata", message.getMetadataPort());
     pt.put("frame.width", message.getFrameWidth());
     pt.put("frame.height", message.getFrameHeight());
     pt.put("frame.rate", message.getFrameRate());

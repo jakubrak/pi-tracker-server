@@ -5,12 +5,15 @@
 
 class StreamSettingsResponse : public IResponseMessage {
 public:
-    StreamSettingsResponse(const short port,
+    StreamSettingsResponse(const int videoPort,
+       const int metadataPort,
        const int frameWidth,
        const int frameHeight,
        const double frameRate);
 
-    short getPort() const;
+    int getVideoPort() const;
+
+    int getMetadataPort() const;
 
     int getFrameWidth() const;
 
@@ -21,7 +24,8 @@ public:
     std::string unparse(IMessageParser& messageParser) override;
 
 private:
-    short port;
+    int videoPort;
+    int metadataPort;
     int frameWidth;
     int frameHeight;
     double frameRate;

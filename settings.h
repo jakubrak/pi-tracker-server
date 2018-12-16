@@ -8,31 +8,36 @@ class Settings
 public:
     Settings();
 
-    short getUdpPort() const;
-    void setUdpPort(short value);
+    int getVideoPort() const;
+    void setVideoPort(int value);
 
-    short getTcpPort() const;
-    void setTcpPort(short value);
+    int getMetadataPort() const;
+    void setMetadataPort(int value);
+
+    int getTcpPort() const;
+    void setTcpPort(int value);
 
     std::string getVideoSource() const;
     void setVideoSource(const std::string &value);
 
-    unsigned int getFrameWidth() const;
-    void setFrameWidth(unsigned int value);
+    int getFrameWidth() const;
+    void setFrameWidth(int value);
 
-    unsigned int getFrameHeight() const;
-    void setFrameHeight(unsigned int value);
+    int getFrameHeight() const;
+    void setFrameHeight(int value);
 
-    float getFrameRate() const;
-    void setFrameRate(float value);
+    double getFrameRate() const;
+    void setFrameRate(double value);
+
 
 private:
-    short udpPort = 5001;
-    short tcpPort = 5002;
+    int videoPort = 5000;
+    int metadataPort = 5006;
+    int tcpPort = 5022;
     std::string videoSource = "/dev/video0";
-    unsigned int frameWidth = 1280;
-    unsigned int frameHeight = 720;
-    float frameRate = 30.0f;
+    int frameWidth = 1280;
+    int frameHeight = 720;
+    double frameRate = 30.0f;
 };
 
 #endif // SETTINGS_H

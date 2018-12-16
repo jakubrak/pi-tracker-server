@@ -2,19 +2,24 @@
 
 #include "streamsettingsresponse.h"
 
-StreamSettingsResponse::StreamSettingsResponse(const short port,
+StreamSettingsResponse::StreamSettingsResponse(const int videoPort, const int metadataPort,
     const int frameWidth,
     const int frameHeight,
     const double frameRate)
-    : port{port},
+    : videoPort{videoPort},
+      metadataPort{metadataPort},
       frameWidth{frameWidth},
       frameHeight{frameHeight},
       frameRate{frameRate} {
 
 }
 
-short StreamSettingsResponse::getPort() const {
-    return port;
+int StreamSettingsResponse::getVideoPort() const {
+    return videoPort;
+}
+
+int StreamSettingsResponse::getMetadataPort() const {
+    return metadataPort;
 }
 
 int StreamSettingsResponse::getFrameWidth() const {
