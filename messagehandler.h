@@ -8,6 +8,7 @@
 
 class IResponseMessage;
 class Settings;
+class Pipeline;
 
 class MessageHandler : public IMessageHandler {
 public:
@@ -21,6 +22,7 @@ public:
 
 private:
     Settings& settings;
+    std::unique_ptr<Pipeline> pipeline;
 };
 
 #endif // MESSAGEHANDLER_H

@@ -16,8 +16,6 @@ int main(int argc, char** argv) {
         Settings settings;
         MessageHandler messageHandler(settings);
         TcpServer server(5022, messageParser, messageHandler);
-        Pipeline pipeline;
-        pipeline.play();
         server.run();
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;

@@ -3,10 +3,11 @@
 #include "iresponsemessage.h"
 #include "settings.h"
 #include "streamsettingsresponse.h"
+#include "pipeline.h"
 
 #include "messagehandler.h"
 
-MessageHandler::MessageHandler(Settings& settings) : settings{settings} {
+MessageHandler::MessageHandler(Settings& settings) : settings{settings}, pipeline{nullptr} {
 
 }
 
@@ -21,6 +22,8 @@ std::unique_ptr<IResponseMessage> MessageHandler::handle(const StreamSettingsReq
 
 std::unique_ptr<IResponseMessage> MessageHandler::handle(const StartStreamingRequest& startStreamingRequest) {
     std::cout << "StartStreamingMsg" << std::endl;
+    pipeline = std::make_unique<Pipeline>();
+    pipeline->play();
     return nullptr;
 }
 
